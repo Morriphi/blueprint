@@ -136,6 +136,17 @@
             return jsonObj;
         };
 
+        obj.toJSONWithFriendlyNames = function() {
+            var jsonObj = {};
+            eachField(function(field) {
+                var c = {};
+                c.value = field.get();
+                c.friendlyName = field.getFriendlyName();
+                jsonObj[field.name()] = c;
+            });
+            return jsonObj;
+        };
+
         obj.toCSV = function(opts) {
             var options = opts || {};
             var str = [];

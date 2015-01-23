@@ -104,8 +104,8 @@
                 return {isValid: true};
             })
                 .validation("b", function () {
-                return {isValid: false, error: 'an error occurred'};
-            });
+                    return {isValid: false, error: 'an error occurred'};
+                });
 
             sut.isValid().should.eql(false);
             sut.errors().should.eql({"b": "an error occurred"});
@@ -129,8 +129,10 @@
             });
 
             sut.isValid().should.eql(false);
-            sut.errors().should.eql({"a": 'an error occurred',
-                "b": "another error occurred"});
+            sut.errors().should.eql({
+                "a": 'an error occurred',
+                "b": "another error occurred"
+            });
         });
 
         it("merges", function () {
@@ -148,7 +150,9 @@
 
             (sut.get("d") === null).should.eql(false);
 
-            sut.validation("a", function(){return {isValid: false};});
+            sut.validation("a", function () {
+                return {isValid: false};
+            });
 
             sut.merge({a: "value a"});
 
@@ -179,6 +183,29 @@
             sut.toJSON().should.eql({a: "value a", b: "value b"});
         });
 
+        it("JSON with friendly names", function () {
+            sut.add("a", {friendlyName: 'friendly name a'});
+            sut.add("b", {friendlyName: 'friendly name b'});
+            sut.set("a", "value a");
+            sut.set("b", "value b");
+
+            sut.toJSONWithFriendlyNames().should.eql(
+                {
+                    a: {value: 'value a', friendlyName: 'friendly name a'},
+                    b: {value: 'value b', friendlyName: 'friendly name b'}
+                });
+
+            sut.add("c", {friendlyName: 'friendly name c'});
+            sut.set('c', 'value c');
+
+            sut.toJSONWithFriendlyNames().should.eql(
+                {
+                    a: {value: 'value a', friendlyName: 'friendly name a'},
+                    b: {value: 'value b', friendlyName: 'friendly name b'},
+                    c: {value: 'value c', friendlyName: 'friendly name c'}
+                });
+        });
+
         it("test", function () {
             var modelA = model.make();
             var modelB = model.make();
@@ -191,8 +218,12 @@
             modelA.get("a").should.eql("model a, value a");
             modelB.get("a").should.eql("model b, value a");
 
-            modelA.validation("a", function(){return {isValid: false};});
-            modelB.validation("a", function(){return {isValid: true};});
+            modelA.validation("a", function () {
+                return {isValid: false};
+            });
+            modelB.validation("a", function () {
+                return {isValid: true};
+            });
 
             modelA.isValid().should.eql(false);
             modelB.isValid().should.eql(true);
@@ -245,21 +276,29 @@
 
             contact.getFields().should.eql(['a', 'b']);
         });
-        
-        it("is", function () {
-            model.is(function(){return true;}, 'a message')('').should
-                .eql({isValid:true});
 
-            model.is(function(){return false;}, 'a message')('').should
-                .eql({isValid:false, error: 'a message'});
+        it("is", function () {
+            model.is(function () {
+                return true;
+            }, 'a message')('').should
+                .eql({isValid: true});
+
+            model.is(function () {
+                return false;
+            }, 'a message')('').should
+                .eql({isValid: false, error: 'a message'});
         });
 
         it("isNot", function () {
-            model.isNot(function(){return false;}, 'a message')('').should
-                .eql({isValid:true});
+            model.isNot(function () {
+                return false;
+            }, 'a message')('').should
+                .eql({isValid: true});
 
-            model.isNot(function(){return true;}, 'a message')('').should
-                .eql({isValid:false, error: 'a message'});
+            model.isNot(function () {
+                return true;
+            }, 'a message')('').should
+                .eql({isValid: false, error: 'a message'});
         });
     });
 
