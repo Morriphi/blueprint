@@ -1,0 +1,11 @@
+{
+  "name": "blueprint",
+  "version": "0.0.1",
+  "dependencies": {
+    "qs": {
+      "version": "2.3.3",
+      "from": "qs@*",
+      "resolved": "https://registry.npmjs.org/qs/-/qs-2.3.3.tgz"
+    }
+  }
+}
